@@ -1,24 +1,38 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    [SerializeField] private int health = 1;
-    [SerializeField] private float score;
-    [SerializeField] GameObject boomVFX;
+    [SerializeField] int hitPoints = 1;
+    [SerializeField] int scoreValue = 100;
+    [SerializeField] GameObject explosionPrefab;
+    [SerializeField] ScoreManager scoreManager;
 
-
-    public void TakeDamage(int damage)
+    public void TakeHit(int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        hitPoints -= damage;
+
+        if (hitPoints <= 0)
         {
-            ExecuteDeath();
+            DefeatTarget();
         }
     }
 
-    void ExecuteDeath()
+    private void DefeatTarget()
     {
-        Instantiate(boomVFX, transform.position, Quaternion.identity);
+        // Add score
+        if (scoreManager != null)
+        {
+            scoreManager.AddScore(scoreValue);
+        }
+
+        // Play the explosion
+        if (explosionPrefab != null)
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        // Disable this target instead of destroying it
         gameObject.SetActive(false);
     }
 }

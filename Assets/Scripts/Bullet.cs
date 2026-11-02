@@ -4,7 +4,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] float speed = 25f;
     void Start()
     {
-        Destroy(gameObject, 3f); // remove this bullet after 3 seconds
+       // Destroy(gameObject, 3f); // remove this bullet after 3 seconds
     }
     void Update()
     {
@@ -16,11 +16,13 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name);
 
         if (other.tag == "Target")
         {
-
-            other.GetComponent<Target>().TakeDamage(1);
+            Target targ = other.GetComponent<Target>();
+            targ.TakeHit(1);
+            Debug.Log("Is there a target: " + targ);
             Destroy(gameObject);
 
         }
